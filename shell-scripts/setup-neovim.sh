@@ -8,7 +8,7 @@ fi
 
 echo "Neovim not found, installing dependancies and building from source..."
 
-apt update && apt install -y ninja-build gettext cmake unzip curl build-essential git tmux
+apt update && apt install -y ninja-build gettext cmake unzip curl build-essential git tmux xclip
 
 # Build Neovim
 git clone https://github.com/neovim/neovim.git /tmp/neovim

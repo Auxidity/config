@@ -18,7 +18,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Running system level installations.."
 chmod +x setup-neovim.sh
-./setup-neovim.sh
+if [[ $IS_ROOT -eq 1 && "$USER_NAME" != "root" ]]; then
+  sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-neovim.sh" "$USER_HOME"
+else
+  "$SCRIPT_DIR/setup-neovim.sh" "$USER_HOME"
+fi
 
 echo "Running user setup as $USER_NAME..."
 chmod +x setup-dotfiles.sh
