@@ -118,3 +118,19 @@ vim.api.nvim_create_autocmd('VimResized', {
         vim.diagnostic.show()
     end,
 })
+
+-- Toggle virtual lines
+local virtual_lines_enabled = true
+
+local function toggle_virtual_lines()
+    virtual_lines_enabled = not virtual_lines_enabled
+
+    vim.diagnostic.config({
+        virtual_lines = virtual_lines_enabled and { format = virtual_lines_format, current_line = true } or false,
+    })
+
+    vim.diagnostic.hide()
+    vim.diagnostic.show()
+end
+
+vim.keymap.set('n', '<leader>v', toggle_virtual_lines, { desc = 'Toggle virtual lines' })
