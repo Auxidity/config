@@ -9,8 +9,11 @@ return {
         "williamboman/mason-lspconfig.nvim",
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "ts_ls", "eslint" },
-                automatic_installation = false
+                -- Enable these on per project basis.
+                -- ensure_installed = { "lua_ls", "ts_ls", "eslint" },
+                ensure_installed = { "lua_ls" },
+                -- I have kept this at false, might be because of it working funnily with rustaceanvim? Flip as neccesary assuming project level installation of nvim
+                automatic_installation = true
             })
         end
     },
