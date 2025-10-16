@@ -283,7 +283,7 @@ return {
 		opts = {
 			keymap = {
 				-- See :h blink-cmp-config-keymap for defining your own keymap
-				preset = "default",
+				preset = "none",
 				["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 				["<CR>"] = { "select_and_accept", "fallback" },
 			},
