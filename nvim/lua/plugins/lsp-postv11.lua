@@ -165,7 +165,15 @@ return {
 
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 			local servers = {
-				clangd = {},
+				clangd = {
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--pch-storage=memory",
+						"--clang-tidy",
+						"--completion-style=detailed",
+					},
+				},
 				-- gopls = {},
 				-- pyright = {},
 				rust_analyzer = {},
