@@ -20,7 +20,7 @@ vim.cmd("set modelines=10")
 vim.cmd("set title")
 vim.cmd('set titleold="Terminal"')
 vim.cmd("set titlestring=%F")
-vim.cmd('set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\\ (line\\ %l/%L,\\ col\\ %c)')
+vim.cmd("set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\\ (line\\ %l/%L,\\ col\\ %c)")
 -- PERSONAL MAPPINGS --
 vim.cmd("set tabstop=4")
 vim.cmd("set softtabstop=0")
@@ -39,27 +39,38 @@ vim.cmd("set smartcase")
 
 vim.cmd("set fileformats=unix,dos,mac")
 
-if vim.fn.exists('$SHELL') == 1 then
-    vim.o.shell = vim.fn.getenv('SHELL')
+if vim.fn.exists("$SHELL") == 1 then
+	vim.o.shell = vim.fn.getenv("SHELL")
 else
-    vim.o.shell = '/bin/sh'
+	vim.o.shell = "/bin/sh"
 end
 --Session management
 vim.cmd('let g:session_directory = "~/.config/nvim/session"')
 vim.cmd('let g:session_autoload = "no"')
 vim.cmd('let g:session_autosave = "no"')
-vim.cmd('let g:session_command_aliases = 1')
+vim.cmd("let g:session_command_aliases = 1")
 -- Copy and paste to system clipboard in visual, VISUAL LINE, normal modes
-vim.keymap.set({ 'n', 'v', 'x' }, 'y', '"+y', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'v', 'x' }, 'p', '"+p', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "y", '"+y', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "p", '"+p', { noremap = true, silent = true })
 --Copy deletion to buffer first before deletion
-vim.keymap.set({ 'n', 'v', 'x' }, 'd', '"+d', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "d", '"+d', { noremap = true, silent = true })
 -- Tabs
-vim.keymap.set('n', '<Tab>', 'gt', { noremap = true, silent = true })
-vim.keymap.set('n', '<S-Tab>', 'gT', { noremap = true, silent = true })
-vim.keymap.set('n', '<C-t>', ':tabnew<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<Tab>", "gt", { noremap = true, silent = true })
+vim.keymap.set("n", "<S-Tab>", "gT", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-t>", ":tabnew<CR>", { noremap = true, silent = true })
 -- Maintain visual mode when shifting
-vim.keymap.set({ 'v', 'x' }, '<', '<gv', { noremap = true, silent = true })
-vim.keymap.set({ 'v', 'x' }, '>', '>gv', { noremap = true, silent = true })
+vim.keymap.set({ "v", "x" }, "<", "<gv", { noremap = true, silent = true })
+vim.keymap.set({ "v", "x" }, ">", ">gv", { noremap = true, silent = true })
 -- Clear search highlighting
-vim.keymap.set('n', '<C-h>', ':nohlsearch', { noremap = true, silent = true })
+vim.keymap.set("n", "<C-h>", ":nohlsearch", { noremap = true, silent = true })
+-- Align by char
+vim.keymap.set("x", "ef", function()
+	local char = vim.fn.nr2char(vim.fn.getchar())
+
+	if char == "'" then
+		char = "\\'"
+	end
+
+	local cmd = string.format("'<,'>!column -t -s '%s' -o ' %s '", char, char)
+	vim.cmd(cmd)
+end, { desc = "Align selection by typed character" })
