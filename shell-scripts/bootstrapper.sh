@@ -1,35 +1,23 @@
 #!/bin/bash
-set -e 
+# master.sh
+set -e
 
-IS_ROOT=0
-if [[ "$EUID" -eq 0 ]]; then
-  IS_ROOT=1
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Run as root or with sudo"
+    exit 1
 fi
 
-if [[ $IS_ROOT -eq 1 && -n "$SUDO_USER" ]]; then
-  USER_NAME="$SUDO_USER"
-else
-  USER_NAME="$(whoami)"
-fi
-
+USER_NAME="${SUDO_USER:-$(whoami)}"
 USER_HOME=$(eval echo "~$USER_NAME")
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Running system level installations.."
-chmod +x setup-neovim.sh
-if [[ $IS_ROOT -eq 1 && "$USER_NAME" != "root" ]]; then
-  sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-neovim.sh" "$USER_HOME"
-else
-  "$SCRIPT_DIR/setup-neovim.sh" "$USER_HOME"
-fi
+echo "Installing system dependencies..."
+apt update && apt install -y \
+    ninja-build gettext cmake unzip curl \
+    build-essential git tmux xclip \
+    ripgrep fzf fd-find direnv
 
 echo "Running user setup as $USER_NAME..."
-chmod +x setup-dotfiles.sh
-
-
-if [[ $IS_ROOT -eq 1 && "$USER_NAME" != "root" ]]; then
-  sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-dotfiles.sh" "$USER_HOME"
-else
-  "$SCRIPT_DIR/setup-dotfiles.sh" "$USER_HOME"
-fi
+sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-neovim.sh" "$USER_HOME"
+sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-dotfiles.sh" "$USER_HOME"
+sudo -u "$USER_NAME" "$SCRIPT_DIR/setup-bashrc.sh" "$USER_HOME"

@@ -2,16 +2,15 @@
 # User level installation
 set -e
 
-DOTFILES_DIR="$HOME/dotfiles"
+USER_HOME="$1"
+DOTFILES_DIR="$USER_HOME/dotfiles"
 
 if [ ! -d "$DOTFILES_DIR" ]; then
     git clone https://github.com/Auxidity/config "$DOTFILES_DIR"
 fi
 
-mkdir -p "$DOTFILES_DIR/nvim"
-cp -r "$DOTFILES_DIR/nvim/"* "$HOME/.config/nvim/"
+mkdir -p "$USER_HOME/.config/nvim"
+cp -r "$DOTFILES_DIR/nvim/"* "$USER_HOME/.config/nvim/"
+cp "$DOTFILES_DIR/.tmux.conf" "$USER_HOME/.tmux.conf"
 
-cp "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
-
-echo Dotfiles copied!
-
+echo "Dotfiles copied!"
