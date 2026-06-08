@@ -72,6 +72,15 @@ return {
 		config = function()
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "markdown" },
+				callback = function(e)
+					if vim.bo[e.buf].buftype == "nofile" then
+						vim.treesitter.stop(e.buf)
+					end
+				end,
+			})
+
 			-- LspAttach: keymaps wired to snacks.picker instead of telescope
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
@@ -170,7 +179,7 @@ return {
 					vim.lsp.start({
 						name = "jdtls",
 						cmd = {
-							"/usr/lib/jvm/java-17-openjdk/bin/java",
+							"/usr/lib/jvm/jdk-21.0.10-oracle-x64/bin/java",
 							"-jar",
 							vim.fn.expand("~/.local/share/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
 							"-configuration",
@@ -186,7 +195,7 @@ return {
 									runtimes = {
 										{
 											name = "JavaSE-1.8",
-											path = "/usr/lib/jvm/java-8-openjdk",
+											path = "/usr/lib/jvm/temurin-8-jdk-amd64",
 											default = true,
 										},
 									},
